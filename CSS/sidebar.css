@@ -1,0 +1,262 @@
+/* Estilos del menú lateral y navegación. */
+
+
+/* SIDEBAR */
+
+#sidebar{
+
+    background:#ffffff;
+
+    width:260px;
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    border-right:1px solid #e5e7eb;
+
+    transition:.3s;
+
+    z-index:20;
+
+}
+
+
+/* LOGO */
+
+#sidebar .logo{
+
+    height:64px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 24px;
+
+    border-bottom:1px solid #f3f4f6;
+
+}
+
+#sidebar .logo i{
+
+    color:#14b8a6;
+
+    font-size:30px;
+
+}
+
+#sidebar .logo span{
+
+    margin-left:10px;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#0f766e;
+
+}
+
+
+/* MENÚ */
+
+#sidebar nav{
+
+    flex:1;
+
+    padding:24px 16px;
+
+    overflow-y:auto;
+
+}
+
+
+/* TÍTULOS */
+
+.menu-title{
+
+    margin-top:22px;
+
+    margin-bottom:12px;
+
+    padding-left:12px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+    color:#9ca3af;
+
+}
+
+
+/* ENLACES */
+
+.nav-link{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:12px 14px;
+
+    margin-bottom:6px;
+
+    border-radius:10px;
+
+    color:#6b7280;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+    font-weight:500;
+
+}
+
+
+.nav-link:hover{
+
+    background:#f0fdfa;
+
+    color:#0f766e;
+
+}
+
+
+.nav-link i{
+
+    font-size:21px;
+
+    transition:.2s;
+
+}
+
+
+.nav-link:hover i{
+
+    transform:scale(1.10);
+
+}
+
+
+/* ENLACE ACTIVO */
+
+.nav-link.active{
+
+    background:#ccfbf1;
+
+    color:#0f766e;
+
+}
+
+
+.nav-link.active i{
+
+    color:#14b8a6;
+
+}
+
+
+/* USUARIO */
+
+.sidebar-user{
+
+    padding:18px;
+
+    border-top:1px solid #f3f4f6;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+.sidebar-user img{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+
+.sidebar-user strong{
+
+    display:block;
+
+    color:#374151;
+
+    font-size:14px;
+
+}
+
+
+.sidebar-user small{
+
+    color:#9ca3af;
+
+}
+
+
+/* BOTÓN CERRAR */
+
+#closeSidebarBtn{
+
+    margin-left:auto;
+
+    color:#6b7280;
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+}
+
+#closeSidebarBtn:hover{
+
+    color:#111827;
+
+}
+
+
+/* OVERLAY */
+
+#mobileOverlay{
+
+    background:rgba(17,24,39,.55);
+
+}
+
+
+/* TRANSICIONES */
+
+.sidebar-hidden{
+
+    transform:translateX(-100%);
+
+}
+
+.sidebar-visible{
+
+    transform:translateX(0);
+
+}

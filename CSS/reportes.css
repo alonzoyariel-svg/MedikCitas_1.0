@@ -1,0 +1,268 @@
+/* Estilos del Dashboard y Reportes. */
+
+
+/* CONTENEDOR GENERAL */
+
+.dashboard{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:30px;
+
+}
+
+
+/* CABECERA */
+
+.dashboard-header h2{
+
+    font-size:30px;
+
+    font-weight:700;
+
+    color:#1f2937;
+
+}
+
+.dashboard-header p{
+
+    color:#6b7280;
+
+    margin-top:6px;
+
+}
+
+
+/* GRID KPIs */
+
+.kpi-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:24px;
+
+}
+
+
+/* TARJETA KPI */
+
+.kpi-card{
+
+    background:#ffffff;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    transition:.25s;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+
+}
+
+.kpi-card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+/* ICONOS KPI */
+
+.kpi-icon{
+
+    width:56px;
+
+    height:56px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:50%;
+
+    font-size:26px;
+
+}
+
+
+/* COLORES */
+
+.icon-blue{
+
+    background:#eff6ff;
+
+    color:#2563eb;
+
+}
+
+.icon-green{
+
+    background:#ecfdf5;
+
+    color:#16a34a;
+
+}
+
+.icon-red{
+
+    background:#fef2f2;
+
+    color:#dc2626;
+
+}
+
+.icon-purple{
+
+    background:#faf5ff;
+
+    color:#9333ea;
+
+}
+
+
+/* TEXTO KPI */
+
+.kpi-info p{
+
+    font-size:14px;
+
+    color:#6b7280;
+
+    margin-bottom:5px;
+
+}
+
+.kpi-info h3{
+
+    font-size:30px;
+
+    font-weight:700;
+
+    color:#1f2937;
+
+}
+
+
+/* GRÁFICOS */
+
+.chart-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:24px;
+
+}
+
+
+.chart-card{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    border:1px solid #e5e7eb;
+
+    padding:30px;
+
+    min-height:280px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#9ca3af;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+
+}
+
+.chart-card i{
+
+    font-size:54px;
+
+    margin-bottom:18px;
+
+}
+
+.chart-card p{
+
+    font-size:15px;
+
+}
+
+
+/* TABLAS FUTURAS */
+
+.table-container{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    border:1px solid #e5e7eb;
+
+    overflow:hidden;
+
+}
+
+.table-container table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.table-container th{
+
+    background:#f8fafc;
+
+    padding:16px;
+
+    text-align:left;
+
+}
+
+.table-container td{
+
+    padding:16px;
+
+    border-top:1px solid #f1f5f9;
+
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+    .chart-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

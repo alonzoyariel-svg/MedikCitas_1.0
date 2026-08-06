@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediKCitas - Sistema de Agenda Médica</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Configuración Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+
+                    colors: {
+                        primary: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e'
+                        }
+                    }
+
+                }
+            }
+        };
+    </script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/reportes.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+</head>
+
+<body class="text-gray-800 h-screen overflow-hidden flex">
+
+    <!-- SIDEBAR -->
+
+    <aside id="sidebar"
+        class="bg-white w-64 border-r border-gray-200 flex flex-col transition-all duration-300 absolute md:relative z-20 h-full transform -translate-x-full md:translate-x-0 shadow-lg md:shadow-none">
+
+        <!-- Logo -->
+
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+
+            <div class="flex items-center gap-2 text-primary-600">
+
+                <i class="ph ph-heartbeat text-3xl"></i>
+
+                <span class="text-xl font-bold">
+
+                    MediKCitas
+
+                </span>
+
+            </div>
+
+            <button id="closeSidebarBtn"
+                class="md:hidden ml-auto text-gray-500 hover:text-gray-700">
+
+                <i class="ph ph-x text-xl"></i>
+
+            </button>
+
+        </div>
+
+        <!-- Navegación -->
+
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto no-scrollbar">
+
+            <a href="#"
+                onclick="showView('login',this)"
+                class="nav-link">
+
+                <i class="ph ph-sign-in"></i>
+
+                <span>Inicio de Sesión</span>
+
+            </a>
+
+            <div class="menu-title">
+
+                Gestión
+
+            </div>
+
+            <a href="#"
+                onclick="showView('citas',this)"
+                class="nav-link">
+
+                <i class="ph ph-calendar-plus"></i>
+
+                <span>Citas</span>
+
+            </a>
+
+            <a href="#"
+                onclick="showView('pacientes',this)"
+                class="nav-link">
+
+                <i class="ph ph-users"></i>
+
+                <span>Pacientes</span>
+
+            </a>
+
+            <a href="#"
+                onclick="showView('medicos',this)"
+                class="nav-link">
+
+                <i class="ph ph-stethoscope"></i>
+
+                <span>Médicos</span>
+
+            </a>
+
+            <div class="menu-title">
+
+                Análisis
+
+            </div>
+
+            <a href="#"
+                onclick="showView('reportes',this)"
+                class="nav-link">
+
+                <i class="ph ph-chart-bar"></i>
+
+                <span>Reportes</span>
+
+            </a>
+
+        </nav>
+
+        <!-- Usuario -->
+
+        <div class="sidebar-user">
+
+            <img
+                src="https://ui-avatars.com/api/?name=Admin+User&background=14b8a6&color=fff"
+                alt="Usuario">
+
+            <div>
+
+                <strong>Admin</strong>
+
+                <small>Recepción</small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- Overlay -->
+
+    <div id="mobileOverlay"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 z-10 hidden md:hidden">
+    </div>
+
+    <!-- CONTENIDO -->
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+
+        <!-- Header -->
+
+        <header class="main-header">
+
+            <div class="flex items-center gap-4">
+
+                <button id="openSidebarBtn"
+                    class="md:hidden">
+
+                    <i class="ph ph-list text-2xl"></i>
+
+                </button>
+
+                <h1 id="viewTitle">
+
+                    Citas
+
+                </h1>
+
+            </div>
+
+            <button class="notification-btn">
+
+                <i class="ph ph-bell text-xl"></i>
+
+                <span class="notification-dot"></span>
+
+            </button>
+
+        </header>
+
+        <!-- Contenedor de Vistas -->
+
+        <section
+            id="main-content"
+            class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
+
+            <!-- LOGIN -->
+
+            <div id="view-login" class="view-section hidden max-w-md mx-auto mt-10">
+
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-50 text-primary-600 mb-6">
+
+            <i class="ph ph-heartbeat text-4xl"></i>
+
+        </div>
+
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">
+
+            Bienvenido a MediKCitas
+
+        </h2>
+
+        <p class="text-gray-500 mb-8">
+
+            Ingresa tus credenciales para acceder al sistema.
+
+        </p>
+
+        <form
+            id="loginForm"
+            onsubmit="login(event)"
+            class="space-y-5 text-left">
+
+            <div>
+
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+
+                    Correo Electrónico
+
+                </label>
+
+                <div class="relative">
+
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+
+                        <i class="ph ph-envelope text-gray-400"></i>
+
+                    </div>
+
+                    <input
+                        type="email"
+                        class="form-control pl-10"
+                        placeholder="admin@medikcitas.com"
+                        required>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="flex justify-between items-center mb-1">
+
+                    <label class="block text-sm font-medium text-gray-700">
+
+                        Contraseña
+
+                    </label>
+
+                    <a
+                        href="#"
+                        class="text-xs text-primary-600 hover:text-primary-700">
+
+                        ¿Olvidaste tu contraseña?
+
+                    </a>
+
+                </div>
+
+                <div class="relative">
+
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+
+                        <i class="ph ph-lock text-gray-400"></i>
+
+                    </div>
+
+                    <input
+                        type="password"
+                        class="form-control pl-10"
+                        placeholder="••••••••"
+                        required>
+
+                </div>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input
+                    id="remember"
+                    type="checkbox">
+
+                <label
+                    for="remember"
+                    class="ml-2 text-sm text-gray-600">
+
+                    Recordarme
+
+                </label>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn-primary w-full flex justify-center items-center gap-2">
+
+                <span>
+
+                    Ingresar al Sistema
+
+                </span>
+
+                <i class="ph ph-arrow-right"></i>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+            <!-- PACIENTES -->
+
+            <div id="view-pacientes" class="view-section hidden fade-in max-w-4xl mx-auto">
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+        <!-- Encabezado -->
+
+        <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+            <div>
+
+                <h3 class="text-lg font-semibold text-gray-800">
+
+                    Registro de Paciente
+
+                </h3>
+
+                <p class="text-sm text-gray-500">
+
+                    Añada un nuevo paciente a la base de datos.
+
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="buscarPaciente()"
+                class="btn-secondary">
+
+                <i class="ph ph-magnifying-glass"></i>
+
+                Buscar Paciente
+
+            </button>
+
+        </div>
+
+        <!-- Formulario -->
+
+        <form
+            id="pacienteForm"
+            onsubmit="guardarPaciente(event)"
+            class="p-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Datos Personales -->
+
+                <div class="space-y-4">
+
+                    <h4 class="font-medium text-gray-700 border-b pb-2">
+
+                        Datos Personales
+
+                    </h4>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Nombre Completo *
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+
+                        <div>
+
+                            <label class="form-label">
+
+                                Tipo Documento *
+
+                            </label>
+
+                            <select
+                                class="form-control"
+                                required>
+
+                                <option>Cédula</option>
+
+                                <option>Pasaporte</option>
+
+                            </select>
+
+                        </div>
+
+                        <div>
+
+                            <label class="form-label">
+
+                                Número Documento *
+
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Fecha de Nacimiento
+
+                        </label>
+
+                        <input
+                            type="date"
+                            class="form-control">
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Sexo
+
+                        </label>
+
+                        <div class="flex gap-4 mt-2">
+
+                            <label class="flex items-center gap-2">
+
+                                <input
+                                    type="radio"
+                                    name="sexo">
+
+                                Masculino
+
+                            </label>
+
+                            <label class="flex items-center gap-2">
+
+                                <input
+                                    type="radio"
+                                    name="sexo">
+
+                                Femenino
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Contacto -->
+
+                <div class="space-y-4">
+
+                    <h4 class="font-medium text-gray-700 border-b pb-2">
+
+                        Contacto y Seguro
+
+                    </h4>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Teléfono Principal *
+
+                        </label>
+
+                        <input
+                            type="tel"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Correo Electrónico
+
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control">
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Aseguradora Médica (ARS)
+
+                        </label>
+
+                        <select class="form-control">
+
+                            <option>
+
+                                Ninguna / Privado
+
+                            </option>
+
+                            <option>Senasa</option>
+
+                            <option>ARS Humano</option>
+
+                            <option>Mapfre Salud</option>
+
+                        </select>
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Observaciones / Alergias
+
+                        </label>
+
+                        <textarea
+                            rows="4"
+                            class="form-control resize-none">
+
+                        </textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Botones -->
+
+            <div class="mt-8 flex justify-end gap-3 border-t pt-5">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="limpiarPaciente(document.getElementById('pacienteForm'))">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-primary flex items-center gap-2">
+
+                    <i class="ph ph-floppy-disk"></i>
+
+                    Guardar Paciente
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+            <!-- MÉDICOS -->
+
+            <div id="view-medicos" class="view-section hidden fade-in max-w-4xl mx-auto">
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+        <!-- Encabezado -->
+
+        <div class="p-6 border-b border-gray-100">
+
+            <h3 class="text-lg font-semibold text-gray-800">
+
+                Gestión de Personal Médico
+
+            </h3>
+
+            <p class="text-sm text-gray-500">
+
+                Añada o edite perfiles de especialistas.
+
+            </p>
+
+        </div>
+
+        <!-- Formulario -->
+
+        <form
+            id="medicoForm"
+            onsubmit="guardarMedico(event)"
+            class="p-6">
+
+            <div class="flex flex-col md:flex-row gap-8">
+
+                <!-- Fotografía -->
+
+                <div class="flex flex-col items-center gap-3 md:w-1/4">
+
+                    <div
+                        onclick="subirFotografia()"
+                        class="w-32 h-32 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 overflow-hidden relative group cursor-pointer hover:bg-gray-50">
+
+                        <i class="ph ph-user text-5xl"></i>
+
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+
+                            <i class="ph ph-camera text-white text-2xl"></i>
+
+                        </div>
+
+                    </div>
+
+                    <span class="text-xs text-gray-500">
+
+                        Subir fotografía
+
+                    </span>
+
+                </div>
+
+                <!-- Información -->
+
+                <div class="md:w-3/4 space-y-5">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        <div>
+
+                            <label class="form-label">
+
+                                Nombres y Apellidos *
+
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Ej. Dr. Juan Pérez"
+                                required>
+
+                        </div>
+
+                        <div>
+
+                            <label class="form-label">
+
+                                Especialidad Principal *
+
+                            </label>
+
+                            <select
+                                class="form-control"
+                                required>
+
+                                <option value="">Seleccione...</option>
+
+                                <option>Medicina General</option>
+
+                                <option>Pediatría</option>
+
+                                <option>Cardiología</option>
+
+                                <option>Dermatología</option>
+
+                                <option>Ginecología</option>
+
+                            </select>
+
+                        </div>
+
+                        <div>
+
+                            <label class="form-label">
+
+                                Exequatur / Licencia
+
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control">
+
+                        </div>
+
+                        <div>
+
+                            <label class="form-label">
+
+                                Teléfono del Consultorio
+
+                            </label>
+
+                            <input
+                                type="tel"
+                                class="form-control">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Horario -->
+
+                    <div class="bg-gray-50 rounded-xl border border-gray-100 p-5">
+
+                        <h5 class="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-4">
+
+                            <i class="ph ph-clock text-primary-600"></i>
+
+                            Horario de Atención
+
+                        </h5>
+
+                        <div class="grid grid-cols-2 gap-4">
+
+                            <div>
+
+                                <label class="form-label">
+
+                                    Días Laborales
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value="Lunes a Viernes">
+
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+
+                                <div>
+
+                                    <label class="form-label">
+
+                                        Desde
+
+                                    </label>
+
+                                    <input
+                                        type="time"
+                                        class="form-control"
+                                        value="08:00">
+
+                                </div>
+
+                                <div>
+
+                                    <label class="form-label">
+
+                                        Hasta
+
+                                    </label>
+
+                                    <input
+                                        type="time"
+                                        class="form-control"
+                                        value="17:00">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Botones -->
+
+            <div class="mt-8 border-t pt-5 flex justify-end gap-3">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="limpiarFormularioMedico(document.getElementById('medicoForm'))">
+
+                    Descartar
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Guardar Médico
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+            <!-- CITAS -->
+
+            <div id="view-citas" class="view-section hidden fade-in max-w-4xl mx-auto">
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Formulario -->
+
+        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+            <div class="p-6 border-b border-gray-100 bg-primary-50">
+
+                <h3 class="text-lg font-semibold text-primary-700 flex items-center gap-2">
+
+                    <i class="ph ph-calendar-plus"></i>
+
+                    Agendar Nueva Cita
+
+                </h3>
+
+            </div>
+
+            <form
+                id="citaForm"
+                onsubmit="guardarCita(event)"
+                class="p-6 space-y-5">
+
+                <!-- Paciente -->
+
+                <div>
+
+                    <label class="form-label">
+
+                        Paciente *
+
+                    </label>
+
+                    <div class="relative">
+
+                        <input
+                            type="text"
+                            class="form-control pl-10"
+                            placeholder="Buscar por nombre o documento..."
+                            required>
+
+                        <i class="ph ph-magnifying-glass absolute left-3 top-3 text-gray-400"></i>
+
+                    </div>
+
+                </div>
+
+                <!-- Especialidad / Médico -->
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Especialidad
+
+                        </label>
+
+                        <select class="form-control">
+
+                            <option>Medicina General</option>
+
+                            <option>Pediatría</option>
+
+                            <option>Cardiología</option>
+
+                        </select>
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Médico *
+
+                        </label>
+
+                        <select
+                            class="form-control"
+                            required>
+
+                            <option value="">
+
+                                Seleccione...
+
+                            </option>
+
+                            <option>
+
+                                Dra. María Fernández
+
+                            </option>
+
+                            <option>
+
+                                Dr. Carlos Gómez
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- Fecha -->
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 bg-gray-50 rounded-xl border border-gray-100 p-4">
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Fecha *
+
+                        </label>
+
+                        <div class="relative">
+
+                            <input
+                                type="date"
+                                class="form-control pl-10"
+                                required>
+
+                            <i class="ph ph-calendar-blank absolute left-3 top-3 text-primary-500"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Hora *
+
+                        </label>
+
+                        <select
+                            class="form-control"
+                            required>
+
+                            <option value="">
+
+                                Seleccione...
+
+                            </option>
+
+                            <option>09:00 AM</option>
+                            <option>09:30 AM</option>
+                            <option>10:00 AM</option>
+                            <option>11:30 AM</option>
+                            <option>02:00 PM</option>
+                            <option>03:30 PM</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- Motivo -->
+
+                <div>
+
+                    <label class="form-label">
+
+                        Motivo de Consulta
+
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Ej. Chequeo general">
+
+                </div>
+
+                <!-- Botón -->
+
+                <div class="pt-4 flex justify-end">
+
+                    <button
+                        type="submit"
+                        class="btn-primary">
+
+                        Confirmar Cita
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- Panel lateral -->
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+
+            <div class="p-4 border-b border-gray-100 flex justify-between">
+
+                <h4 class="font-semibold">
+
+                    Próximas Citas Hoy
+
+                </h4>
+
+                <span class="bg-primary-100 text-primary-700 text-xs font-bold px-2 py-1 rounded-full">
+
+                    4
+
+                </span>
+
+            </div>
+
+            <div class="p-4 space-y-3">
+
+                <!-- Cita -->
+
+                <div class="border rounded-lg p-3 border-l-4 border-l-primary-500 hover:bg-primary-50 cursor-pointer">
+
+                    <div class="flex justify-between">
+
+                        <strong>
+
+                            09:00 AM
+
+                        </strong>
+
+                        <span class="text-xs bg-green-100 text-green-700 px-2 rounded">
+
+                            Confirmada
+
+                        </span>
+
+                    </div>
+
+                    <p class="font-medium mt-1">
+
+                        Ana Laura Reyes
+
+                    </p>
+
+                    <small class="text-gray-500">
+
+                        Dra. Fernández
+
+                    </small>
+
+                </div>
+
+                <!-- Cita -->
+
+                <div class="border rounded-lg p-3 border-l-4 border-l-yellow-400 hover:bg-primary-50 cursor-pointer">
+
+                    <div class="flex justify-between">
+
+                        <strong>
+
+                            10:30 AM
+
+                        </strong>
+
+                        <span class="text-xs bg-yellow-100 text-yellow-700 px-2 rounded">
+
+                            Pendiente
+
+                        </span>
+
+                    </div>
+
+                    <p class="font-medium mt-1">
+
+                        Roberto Carlos Minaya
+
+                    </p>
+
+                    <small class="text-gray-500">
+
+                        Dr. Gómez
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <!-- REPORTES -->
+
+            <div id="view-reportes" class="view-section hidden fade-in max-w-6xl mx-auto">
+
+    <!-- Encabezado -->
+
+    <div class="mb-6">
+
+        <h2 class="text-2xl font-bold text-gray-800">
+
+            Resumen Estadístico
+
+        </h2>
+
+        <p class="text-gray-500">
+
+            Métricas generales de la institución.
+
+        </p>
+
+    </div>
+
+    <!-- Tarjetas -->
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+        <!-- Citas -->
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
+
+            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center">
+
+                <i class="ph ph-calendar-check text-2xl"></i>
+
+            </div>
+
+            <div>
+
+                <p class="text-sm text-gray-500">
+
+                    Citas Realizadas
+
+                </p>
+
+                <h4 class="text-2xl font-bold">
+
+                    342
+
+                </h4>
+
+            </div>
+
+        </div>
+
+        <!-- Pacientes -->
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
+
+            <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center">
+
+                <i class="ph ph-users text-2xl"></i>
+
+            </div>
+
+            <div>
+
+                <p class="text-sm text-gray-500">
+
+                    Nuevos Pacientes
+
+                </p>
+
+                <h4 class="text-2xl font-bold">
+
+                    48
+
+                </h4>
+
+            </div>
+
+        </div>
+
+        <!-- Canceladas -->
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
+
+            <div class="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
+
+                <i class="ph ph-calendar-x text-2xl"></i>
+
+            </div>
+
+            <div>
+
+                <p class="text-sm text-gray-500">
+
+                    Citas Canceladas
+
+                </p>
+
+                <h4 class="text-2xl font-bold">
+
+                    12
+
+                </h4>
+
+            </div>
+
+        </div>
+
+        <!-- Ingresos -->
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
+
+            <div class="w-12 h-12 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center">
+
+                <i class="ph ph-money text-2xl"></i>
+
+            </div>
+
+            <div>
+
+                <p class="text-sm text-gray-500">
+
+                    Ingresos Estimados
+
+                </p>
+
+                <h4 class="text-xl font-bold">
+
+                    RD$ 12,450
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Gráficos -->
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 h-64 flex flex-col justify-center items-center text-gray-400">
+
+            <i class="ph ph-chart-line-up text-5xl mb-3"></i>
+
+            <p>
+
+                Gráfico de Citas por Mes
+
+            </p>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 h-64 flex flex-col justify-center items-center text-gray-400">
+
+            <i class="ph ph-chart-pie-slice text-5xl mb-3"></i>
+
+            <p>
+
+                Distribución de Pacientes por ARS
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+        </section>
+
+    </main>
+
+    <!-- Toast -->
+
+    <div id="toast">
+
+        <i class="ph ph-check-circle"></i>
+
+        <span id="toastMessage">
+
+            Acción completada
+
+        </span>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/app.js"></script>
+
+    <script src="js/navigation.js"></script>
+
+    <script src="js/sidebar.js"></script>
+
+    <script src="js/toast.js"></script>
+
+    <script src="js/login.js"></script>
+
+    <script src="js/pacientes.js"></script>
+
+    <script src="js/medicos.js"></script>
+
+    <script src="js/citas.js"></script>
+
+    <script src="js/reportes.js"></script>
+
+</body>
+
+</html>
